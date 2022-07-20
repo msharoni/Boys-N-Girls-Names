@@ -14,17 +14,17 @@ class ConfettiSample extends StatelessWidget {
         title: 'Confetti',
         home: Scaffold(
           backgroundColor: Colors.grey[900],
-          body: HomePage(),
+          body: MyApp(),
         ));
   }
 }
 
-class HomePage extends StatefulWidget {
+class MyApp extends StatefulWidget {
   @override
-  _HomePageState createState() => _HomePageState();
+  _MyAppState createState() => _MyAppState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _MyAppState extends State<MyApp> {
   late ConfettiController _controllerCenterLeft;
   late ConfettiController _controllerCenterRight;
 
