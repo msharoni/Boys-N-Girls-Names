@@ -1,7 +1,8 @@
 import 'dart:math';
-
+import 'package:flutter_application_1/NameWidgets.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
+import 'globals.dart' as globals;
 
 void main() => runApp(const ConfettiSample());
 
@@ -10,16 +11,28 @@ class ConfettiSample extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    void loadAssets() async {
+      String girlNames = await DefaultAssetBundle.of(context)
+          .loadString('assets/NameFiles/GirlNames.txt');
+      String boyNames = await DefaultAssetBundle.of(context)
+          .loadString('assets/NameFiles/BoyNames.txt');
+      globals.allBoyNames.addAll(boyNames.split('\n'));
+      globals.allGirlNames.addAll(girlNames.split('\n'));
+    }
+
+    loadAssets();
+
     return MaterialApp(
         title: 'Confetti',
         home: Scaffold(
           backgroundColor: Colors.grey[900],
-          body: MyApp(),
+          body: const MyApp(),
         ));
   }
 }
 
 class MyApp extends StatefulWidget {
+  const MyApp({Key? key}) : super(key: key);
   @override
   _MyAppState createState() => _MyAppState();
 }
@@ -118,12 +131,22 @@ class _MyAppState extends State<MyApp> {
             alignment: Alignment.centerLeft,
             child: Padding(
               padding: const EdgeInsets.all(16.0),
-              child: RaisedButton(
-                onPressed: () {},
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20)),
-                color: Colors.blue,
-                textColor: Colors.white,
+              child: TextButton(
+                onPressed: () async {
+                  globals.boy = true;
+                  await Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => const Names()),
+                  );
+                  setState(() {});
+                },
+                style: ButtonStyle(
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20)),
+                  ),
+                  backgroundColor:
+                      MaterialStateProperty.all<Color>(Colors.blue),
+                ),
                 child: const Padding(
                   padding: EdgeInsets.all(20.0),
                   child: Text(
@@ -141,12 +164,22 @@ class _MyAppState extends State<MyApp> {
             alignment: Alignment.centerRight,
             child: Padding(
               padding: const EdgeInsets.all(16.0),
-              child: RaisedButton(
-                onPressed: () {},
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20)),
-                color: Colors.pink,
-                textColor: Colors.white,
+              child: TextButton(
+                onPressed: () async {
+                  globals.boy = false;
+                  await Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => const Names()),
+                  );
+                  setState(() {});
+                },
+                style: ButtonStyle(
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20)),
+                  ),
+                  backgroundColor:
+                      MaterialStateProperty.all<Color>(Colors.pink),
+                ),
                 child: const Padding(
                   padding: EdgeInsets.all(20.0),
                   child: Text(
@@ -163,7 +196,7 @@ class _MyAppState extends State<MyApp> {
           const Align(
             alignment: Alignment.topCenter,
             child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 100),
+              padding: EdgeInsets.symmetric(vertical: 100),
               child: Text(
                 "Congratulations!",
                 style: TextStyle(
@@ -173,15 +206,43 @@ class _MyAppState extends State<MyApp> {
               ),
             ),
           ),
+          Align(
+              alignment: Alignment.bottomCenter,
+              child: globals.saved.isNotEmpty
+                  ? Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: TextButton(
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (context) => const Saved()),
+                          );
+                          setState(() {});
+                        },
+                        style: ButtonStyle(
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20)),
+                          ),
+                          backgroundColor:
+                              MaterialStateProperty.all<Color>(Colors.white70),
+                        ),
+                        child: const Padding(
+                          padding: EdgeInsets.all(16.0),
+                          child: Text(
+                            "Saved Names",
+                            style: TextStyle(
+                              fontSize: 25,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
+                  : const SizedBox.shrink()),
         ],
       ),
-    );
-  }
-
-  Text _display(String text) {
-    return Text(
-      text,
-      style: const TextStyle(color: Colors.white, fontSize: 20),
     );
   }
 }

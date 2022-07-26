@@ -3,7 +3,7 @@
    <application
         android:label="Boy-N-Girl Names"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/babies">
         <activity
             android:name=".MainActivity"
             android:exported="true"
